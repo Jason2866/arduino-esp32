@@ -230,8 +230,8 @@ int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout)
     struct timeval tv;
     FD_ZERO(&fdset);
     FD_SET(sockfd, &fdset);
-    tv.tv_sec = 0;
-    tv.tv_usec = _timeout * 1000;
+    tv.tv_sec = _timeout / 1000;
+    tv.tv_usec = 0;
 
 #ifdef ESP_IDF_VERSION_MAJOR
     int res = lwip_connect(sockfd, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
@@ -271,17 +271,18 @@ int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout)
         }
     }
 
-#define ROE_WIFICLIENT(x,msg) { if (((x)<0)) { log_e("LWIP Socket config of " msg " failed."); return -1; }}
-    ROE_WIFICLIENT(lwip_setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)),"SO_RCVTIMEO");
-    ROE_WIFICLIENT(lwip_setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)),"SO_SNDTIMEO");
+#define ROE_WIFICLIENT(x,msg) { if (((x)<0)) { log_e("Setsockopt '" msg "'' on fd %d failed. errno: %d, \"%s\"", sockfd, errno, strerror(errno)); return 0; }}
+    ROE_WIFICLIENT(setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)),"SO_SNDTIMEO");
+    ROE_WIFICLIENT(setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)),"SO_RCVTIMEO");
 
     // These are also set in WiFiClientSecure, should be set here too?
-    //ROE_WIFICLIENT(lwip_setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, &enable, sizeof(enable)),"TCP_NODELAY"); 
-    //ROE_WIFICLIENT (lwip_setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable)),"SO_KEEPALIVE");
+    //ROE_WIFICLIENT(setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, &enable, sizeof(enable)),"TCP_NODELAY"); 
+    //ROE_WIFICLIENT (setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable)),"SO_KEEPALIVE");
 
     fcntl( sockfd, F_SETFL, fcntl( sockfd, F_GETFL, 0 ) & (~O_NONBLOCK) );
     clientSocketHandle.reset(new WiFiClientSocketHandle(sockfd));
     _rxBuffer.reset(new WiFiClientRxBuffer(sockfd));
+
     _connected = true;
     return 1;
 }
@@ -302,9 +303,14 @@ int WiFiClient::connect(const char *host, uint16_t port, int32_t timeout)
 
 int WiFiClient::setSocketOption(int option, char* value, size_t len)
 {
-    int res = setsockopt(fd(), SOL_SOCKET, option, value, len);
+    return setSocketOption(SOL_SOCKET, option, (const void*)value, len);
+}
+
+int WiFiClient::setSocketOption(int level, int option, const void* value, size_t len)
+{
+    int res = setsockopt(fd(), level, option, value, len);
     if(res < 0) {
-        log_e("%X : %d", option, errno);
+        log_e("fail on %d, errno: %d, \"%s\"", fd(), errno, strerror(errno));
     }
     return res;
 }
@@ -329,11 +335,7 @@ int WiFiClient::setTimeout(uint32_t seconds)
 
 int WiFiClient::setOption(int option, int *value)
 {
-    int res = setsockopt(fd(), IPPROTO_TCP, option, (char *) value, sizeof(int));
-    if(res < 0) {
-        log_e("fail on fd %d, errno: %d, \"%s\"", fd(), errno, strerror(errno));
-    }
-    return res;
+    return setSocketOption(IPPROTO_TCP, option, (const void*)value, sizeof(int));
 }
 
 int WiFiClient::getOption(int option, int *value)
