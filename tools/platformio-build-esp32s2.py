@@ -288,7 +288,6 @@ env.Append(
         join(FRAMEWORK_DIR, "tools", "sdk", "esp32s2", "include", "fb_gfx", "include"),
         join(FRAMEWORK_DIR, "tools", "sdk", "esp32s2", env.BoardConfig().get("build.arduino.memory_type", (env.BoardConfig().get("build.flash_mode", "dout") + "_qspi")), "include"),
         join(FRAMEWORK_DIR, "cores", env.BoardConfig().get("build.core"))
-        join(FRAMEWORK_DIR, "cores", env.BoardConfig().get("build.core"))
     ],
 
     LIBPATH=[
