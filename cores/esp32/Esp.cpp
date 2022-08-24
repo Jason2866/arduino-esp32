@@ -201,7 +201,7 @@ static uint32_t sketchSize(sketchSize_t response) {
         return data.image_len;
     }
 }
-    
+
 uint32_t EspClass::getSketchSize () {
     return sketchSize(SKETCH_SIZE_TOTAL);
 }
@@ -336,46 +336,28 @@ uint32_t EspClass::getFlashChipSpeed(void)
     return magicFlashChipSpeed(fhdr.spi_speed);
 }
 
-FlashMode_t EspClass::getFlashChipMode(void)
+const char * EspClass::getFlashChipMode(void)
 {
    #if CONFIG_IDF_TARGET_ESP32S2
-   const uint32_t spi_ctrl = REG_READ(PERIPHS_SPI_FLASH_CTRL);
+   uint32_t spi_ctrl = REG_READ(PERIPHS_SPI_FLASH_CTRL);
    #else
-   const uint32_t spi_ctrl = REG_READ(SPI_CTRL_REG(0));
+   uint32_t spi_ctrl = REG_READ(SPI_CTRL_REG(0));
    #endif
    /* Not all of the following constants are already defined in older versions of spi_reg.h, so do it manually for now*/
    if (spi_ctrl & BIT(24)) { //SPI_FREAD_QIO
-       return F("QIO");
+       return ("QIO");
    } else if (spi_ctrl & BIT(20)) { //SPI_FREAD_QUAD
-       return F("QOUT");
+       return ("QOUT");
    } else if (spi_ctrl &  BIT(23)) { //SPI_FREAD_DIO
-       return F("DIO");
+       return ("DIO");
    } else if (spi_ctrl & BIT(14)) { // SPI_FREAD_DUAL
-       return F("DOUT");
+       return ("DOUT");
    } else if (spi_ctrl & BIT(13)) { //SPI_FASTRD_MODE
-       return F("Fast");
+       return ("Fast");
    } else {
-       return F("Slow");
+       return ("Slow");
    }
-   return F("DOUT");
-}
-
-uint32_t EspClass::magicFlashChipSize(uint8_t byte)
-{
-    switch(byte & 0x0F) {
-    case 0x0: // 8 MBit (1MB)
-        return (1_MB);
-    case 0x1: // 16 MBit (2MB)
-        return (2_MB);
-    case 0x2: // 32 MBit (4MB)
-        return (4_MB);
-    case 0x3: // 64 MBit (8MB)
-        return (8_MB);
-    case 0x4: // 128 MBit (16MB)
-        return (16_MB);
-    default: // fail?
-        return 0;
-    }
+   return ("DOUT");
 }
 
 uint32_t EspClass::magicFlashChipSpeed(uint8_t byte)
@@ -392,15 +374,6 @@ uint32_t EspClass::magicFlashChipSpeed(uint8_t byte)
     default: // fail?
         return 0;
     }
-}
-
-FlashMode_t EspClass::magicFlashChipMode(uint8_t byte)
-{
-    FlashMode_t mode = (FlashMode_t) byte;
-    if(mode > FM_SLOW_READ) {
-        mode = FM_UNKNOWN;
-    }
-    return mode;
 }
 
 bool EspClass::flashEraseSector(uint32_t sector)
