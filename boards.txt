@@ -27982,4 +27982,3 @@ atd147_s3.menu.EraseFlash.all=Enabled
 atd147_s3.menu.EraseFlash.all.upload.erase_cmd=-e
 
 ##############################################################
-
