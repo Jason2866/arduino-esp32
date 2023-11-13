@@ -30,7 +30,6 @@
 
 WiFiMulti::WiFiMulti()
 {
-    ipv6_support = false;
 }
 
 WiFiMulti::~WiFiMulti()
@@ -161,8 +160,6 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout)
             log_i("[WIFI] Connecting BSSID: %02X:%02X:%02X:%02X:%02X:%02X SSID: %s Channel: %d (%d)", bestBSSID[0], bestBSSID[1], bestBSSID[2], bestBSSID[3], bestBSSID[4], bestBSSID[5], bestNetwork.ssid, bestChannel, bestNetworkDb);
 
             WiFi.begin(bestNetwork.ssid, bestNetwork.passphrase, bestChannel, bestBSSID);
-            if (ipv6_support == true)
-                WiFi.IPv6(true);
             status = WiFi.status();
 
             auto startTime = millis();
@@ -204,8 +201,4 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout)
     }
 
     return status;
-}
-
-void WiFiMulti::IPv6(bool state) {
-    ipv6_support = state;
 }
