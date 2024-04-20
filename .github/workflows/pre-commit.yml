@@ -56,7 +56,7 @@ jobs:
 
       - name: Save pre-commit cache
         uses: actions/cache/save@v4
-        if: ${{ always() && steps.restore-cache.outputs.cache-hit != 'true' }}
+        #if: ${{ always() && steps.restore-cache.outputs.cache-hit != 'true' }}
         continue-on-error: true
         with:
           path: |
@@ -67,6 +67,6 @@ jobs:
       - name: Push changes using pre-commit-ci-lite
         uses: pre-commit-ci/lite-action@v1.0.2
         # Only push changes in PRs
-        if: ${{ always() && github.event_name == 'pull_request' }}
+        #if: ${{ always() && github.event_name == 'pull_request' }}
         with:
           msg: "ci(pre-commit): Apply automatic fixes"
