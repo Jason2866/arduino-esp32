@@ -95,7 +95,6 @@ set(ARDUINO_ALL_LIBRARIES
   SPI
   Ticker
   Update
-  USB
   WebServer
   WiFi
   Wire
@@ -149,17 +148,6 @@ set(ARDUINO_LIBRARY_Update_SRCS
   libraries/Update/src/Updater.cpp
   libraries/Update/src/HttpsOTAUpdate.cpp)
 
-set(ARDUINO_LIBRARY_USB_SRCS
-  libraries/USB/src/USBHID.cpp
-  libraries/USB/src/USBMIDI.cpp
-  libraries/USB/src/USBHIDMouse.cpp
-  libraries/USB/src/USBHIDKeyboard.cpp
-  libraries/USB/src/USBHIDGamepad.cpp
-  libraries/USB/src/USBHIDConsumerControl.cpp
-  libraries/USB/src/USBHIDSystemControl.cpp
-  libraries/USB/src/USBHIDVendor.cpp
-  libraries/USB/src/USBVendor.cpp)
-
 set(ARDUINO_LIBRARY_WebServer_SRCS
   libraries/WebServer/src/WebServer.cpp
   libraries/WebServer/src/Parsing.cpp
@@ -206,7 +194,7 @@ set(includedirs variants/${CONFIG_ARDUINO_VARIANT}/ cores/esp32/ ${ARDUINO_LIBRA
 set(srcs ${CORE_SRCS} ${ARDUINO_LIBRARIES_SRCS})
 set(priv_includes cores/esp32/libb64)
 set(requires spi_flash esp_partition mbedtls wpa_supplicant esp_adc esp_eth http_parser)
-set(priv_requires fatfs nvs_flash app_update bootloader_support bt esp_hid usb ${ARDUINO_LIBRARIES_REQUIRES})
+set(priv_requires fatfs nvs_flash app_update bootloader_support bt esp_hid ${ARDUINO_LIBRARIES_REQUIRES})
 
 idf_component_register(INCLUDE_DIRS ${includedirs} PRIV_INCLUDE_DIRS ${priv_includes} SRCS ${srcs} REQUIRES ${requires} PRIV_REQUIRES ${priv_requires})
 
@@ -247,9 +235,6 @@ function(maybe_add_component component_name)
     endif()
 endfunction()
 
-if(IDF_TARGET MATCHES "esp32s2|esp32s3" AND CONFIG_TINYUSB_ENABLED)
-    maybe_add_component(arduino_tinyusb)
-endif()
 if(NOT CONFIG_ARDUINO_SELECTIVE_COMPILATION OR CONFIG_ARDUINO_SELECTIVE_ArduinoOTA)
     maybe_add_component(esp_https_ota)
 endif()
