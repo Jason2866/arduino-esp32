@@ -78,8 +78,6 @@ set(CORE_SRCS
 set(ARDUINO_ALL_LIBRARIES
   ArduinoOTA
   AsyncUDP
-  BLE
-  BluetoothSerial
   DNSServer
   EEPROM
   ESP_I2S
@@ -100,7 +98,6 @@ set(ARDUINO_ALL_LIBRARIES
   RainMaker
   SD_MMC
   SD
-  SimpleBLE
   SPIFFS
   SPI
   Ticker
@@ -117,12 +114,6 @@ set(ARDUINO_LIBRARY_ArduinoOTA_SRCS libraries/ArduinoOTA/src/ArduinoOTA.cpp)
 set(ARDUINO_LIBRARY_ArduinoOTA_REQUIRES esp_https_ota)
 
 set(ARDUINO_LIBRARY_AsyncUDP_SRCS libraries/AsyncUDP/src/AsyncUDP.cpp)
-
-set(ARDUINO_LIBRARY_BluetoothSerial_SRCS
-  libraries/BluetoothSerial/src/BluetoothSerial.cpp
-  libraries/BluetoothSerial/src/BTAddress.cpp
-  libraries/BluetoothSerial/src/BTAdvertisedDeviceSet.cpp
-  libraries/BluetoothSerial/src/BTScanResultsSet.cpp)
 
 set(ARDUINO_LIBRARY_DNSServer_SRCS libraries/DNSServer/src/DNSServer.cpp)
 
@@ -181,8 +172,6 @@ set(ARDUINO_LIBRARY_SD_SRCS
   libraries/SD/src/sd_diskio.cpp
   libraries/SD/src/sd_diskio_crc.c)
 
-set(ARDUINO_LIBRARY_SimpleBLE_SRCS libraries/SimpleBLE/src/SimpleBLE.cpp)
-
 set(ARDUINO_LIBRARY_SPIFFS_SRCS libraries/SPIFFS/src/SPIFFS.cpp)
 
 set(ARDUINO_LIBRARY_SPI_SRCS libraries/SPI/src/SPI.cpp)
@@ -234,38 +223,6 @@ set(ARDUINO_LIBRARY_WiFi_SRCS
 set(ARDUINO_LIBRARY_WiFiProv_SRCS libraries/WiFiProv/src/WiFiProv.cpp)
 
 set(ARDUINO_LIBRARY_Wire_SRCS libraries/Wire/src/Wire.cpp)
-
-set(ARDUINO_LIBRARY_BLE_SRCS
-  libraries/BLE/src/BLE2902.cpp
-  libraries/BLE/src/BLE2904.cpp
-  libraries/BLE/src/BLEAddress.cpp
-  libraries/BLE/src/BLEAdvertisedDevice.cpp
-  libraries/BLE/src/BLEAdvertising.cpp
-  libraries/BLE/src/BLEBeacon.cpp
-  libraries/BLE/src/BLECharacteristic.cpp
-  libraries/BLE/src/BLECharacteristicMap.cpp
-  libraries/BLE/src/BLEClient.cpp
-  libraries/BLE/src/BLEDescriptor.cpp
-  libraries/BLE/src/BLEDescriptorMap.cpp
-  libraries/BLE/src/BLEDevice.cpp
-  libraries/BLE/src/BLEEddystoneTLM.cpp
-  libraries/BLE/src/BLEEddystoneURL.cpp
-  libraries/BLE/src/BLEExceptions.cpp
-  libraries/BLE/src/BLEHIDDevice.cpp
-  libraries/BLE/src/BLERemoteCharacteristic.cpp
-  libraries/BLE/src/BLERemoteDescriptor.cpp
-  libraries/BLE/src/BLERemoteService.cpp
-  libraries/BLE/src/BLEScan.cpp
-  libraries/BLE/src/BLESecurity.cpp
-  libraries/BLE/src/BLEServer.cpp
-  libraries/BLE/src/BLEService.cpp
-  libraries/BLE/src/BLEServiceMap.cpp
-  libraries/BLE/src/BLEUtils.cpp
-  libraries/BLE/src/BLEUUID.cpp
-  libraries/BLE/src/BLEValue.cpp
-  libraries/BLE/src/FreeRTOS.cpp
-  libraries/BLE/src/GeneralUtils.cpp
-  )
 
 set(ARDUINO_LIBRARIES_SRCS)
 set(ARDUINO_LIBRARIES_REQUIRES)
