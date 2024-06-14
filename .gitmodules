@@ -1,0 +1,3 @@
+[submodule "libraries/esp-nimble-cpp"]
+	path = libraries/esp-nimble-cpp
+	url = https://github.com/h2zero/esp-nimble-cpp
