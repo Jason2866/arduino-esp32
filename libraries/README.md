@@ -8,14 +8,6 @@ arduino-esp32 includes libraries for Arduino compatibility along with some objec
 ### AsyncUDP
   Asynchronous task driven UDP datagram client/server
 
-### BLE
-  Bluetooth Low Energy v4.2 client/server framework
-
-### BluetoothSerial
-  Serial to Bluetooth redirection server\
-  Note: This library depends on Bluetooth Classic which is only available for ESP32\
-  (Bluetoothserial is **not available** for ESP32-S2, ESP32-C3, ESP32-S3).
-
 ### DNSServer
   A basic UDP DNS daemon (includes captive portal demo)
 
@@ -79,14 +71,11 @@ arduino-esp32 includes libraries for Arduino compatibility along with some objec
 ### SD_MMC
   Secure Digital card filesystem using 4-lane access
 
-### SimpleBLE
-  Minimal BLE advertiser
-
 ### SPI
   Arduino compatible Serial Peripheral Interface driver (master only)
 
 ### SPIFFS
-  SPI Flash Filesystem (see [spiffs-plugin](https://github.com/me-no-dev/arduino-esp32fs-plugin) to upload to device)
+  SPI Flash Filesystem
 
 ### Ticker
   A timer to call functions on an interval
