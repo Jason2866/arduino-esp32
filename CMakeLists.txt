@@ -296,6 +296,11 @@ set(priv_includes cores/esp32/libb64)
 set(requires spi_flash esp_partition mbedtls wifi_provisioning wpa_supplicant esp_adc esp_eth http_parser)
 set(priv_requires fatfs nvs_flash app_update spiffs bootloader_support bt esp_hid usb esp_psram ${ARDUINO_LIBRARIES_REQUIRES})
 
+if(IDF_TARGET STREQUAL "esp32s3")
+  set(priv_requires fatfs nvs_flash app_update spiffs bootloader_support bt esp_hid usb esp_psram esp-sr ${ARDUINO_LIBRARIES_REQUIRES})
+  list(APPEND requires esp-sr)
+endif()
+
 if(NOT CONFIG_ARDUINO_SELECTIVE_COMPILATION OR CONFIG_ARDUINO_SELECTIVE_OpenThread)
   #if(CONFIG_SOC_IEEE802154_SUPPORTED) # Does not work!
   #if(CONFIG_OPENTHREAD_ENABLED) # Does not work!
