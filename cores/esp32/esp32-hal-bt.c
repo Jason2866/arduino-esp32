@@ -19,9 +19,8 @@
 #include "esp_bt_main.h"
 #include "esp_bt_device.h"
 #include "esp32-hal-bt.h"
-#include "esp_log.h"
+#include "esp32-hal-log.h"
 
-static const char* TAG = "arduino-bt";
 static bool _bt_initialized = false;
 static bool _bt_enabled = false;
 
@@ -42,7 +41,7 @@ bool btStart() {
 
         err = esp_bt_controller_init(&bt_cfg);
         if(err != ESP_OK) {
-            ESP_LOGE(TAG, "BT controller initialize failed: %s", esp_err_to_name(err));
+            log_e("BT controller initialize failed: %s", esp_err_to_name(err));
             return false;
         }
 
@@ -51,20 +50,20 @@ bool btStart() {
 
     err = esp_bt_controller_enable(ESP_BT_MODE_BTDM);
     if(err != ESP_OK) {
-        ESP_LOGE(TAG, "BT controller enable failed: %s", esp_err_to_name(err));
+        log_e("BT controller enable failed: %s", esp_err_to_name(err));
         return false;
     }
 
     err = esp_bluedroid_init();
     if(err != ESP_OK) {
-        ESP_LOGE(TAG, "Bluedroid initialize failed: %s", esp_err_to_name(err));
+        log_e("Bluedroid initialize failed: %s", esp_err_to_name(err));
         esp_bt_controller_disable();
         return false;
     }
 
     err = esp_bluedroid_enable();
     if(err != ESP_OK) {
-        ESP_LOGE(TAG, "Bluedroid enable failed: %s", esp_err_to_name(err));
+        log_e("Bluedroid enable failed: %s", esp_err_to_name(err));
         esp_bluedroid_deinit();
         esp_bt_controller_disable();
         return false;
@@ -83,19 +82,19 @@ bool btStop() {
 
     err = esp_bluedroid_disable();
     if(err != ESP_OK) {
-        ESP_LOGE(TAG, "Bluedroid disable failed: %s", esp_err_to_name(err));
+        log_e("Bluedroid disable failed: %s", esp_err_to_name(err));
         return false;
     }
 
     err = esp_bluedroid_deinit();
     if(err != ESP_OK) {
-        ESP_LOGE(TAG, "Bluedroid deinitialize failed: %s", esp_err_to_name(err));
+        log_e("Bluedroid deinitialize failed: %s", esp_err_to_name(err));
         return false;
     }
 
     err = esp_bt_controller_disable();
     if(err != ESP_OK) {
-        ESP_LOGE(TAG, "BT controller disable failed: %s", esp_err_to_name(err));
+        log_e("BT controller disable failed: %s", esp_err_to_name(err));
         return false;
     }
 
