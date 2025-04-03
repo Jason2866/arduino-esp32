@@ -28,10 +28,12 @@
 #if defined(CONFIG_BT_ENABLED) && SOC_BT_SUPPORTED
 #include "esp_bt.h"
 #if CONFIG_IDF_TARGET_ESP32
+bool btInUse() __attribute__((weak));
 bool btInUse() {
   return true;
 }
 #else
+bool btInUse() __attribute__((weak));
 bool btInUse() {
   return false;
 }

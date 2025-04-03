@@ -3,7 +3,7 @@
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
@@ -12,112 +12,95 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "esp32-hal-bt.h"
-
-#if SOC_BT_SUPPORTED
-#ifdef CONFIG_BT_ENABLED
+#include "sdkconfig.h"
+#if defined(CONFIG_BT_ENABLED) && SOC_BT_SUPPORTED
 
 #include "esp_bt.h"
+#include "esp_bt_main.h"
+#include "esp_bt_device.h"
+#include "esp32-hal-bt.h"
+#include "esp_log.h"
 
-#ifdef CONFIG_BTDM_CONTROLLER_MODE_BTDM
-#define BT_MODE ESP_BT_MODE_BTDM
-#elif defined(CONFIG_BTDM_CONTROLLER_MODE_BR_EDR_ONLY)
-#define BT_MODE ESP_BT_MODE_CLASSIC_BT
-#else
-#define BT_MODE ESP_BT_MODE_BLE
-#endif
+static const char* TAG = "arduino-bt";
+static bool _bt_initialized = false;
+static bool _bt_enabled = false;
 
-bool btStarted() {
-  return (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_ENABLED);
+// Diese Implementierung überschreibt die schwache (weak) Version in esp32-hal-misc.c
+bool btInUse() {
+    return _bt_initialized && _bt_enabled;
 }
 
 bool btStart() {
-  return btStartMode(BT_MODE);
+    esp_err_t err;
+
+    if(_bt_enabled) {
+        return true;
+    }
+
+    if(!_bt_initialized) {
+        esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
+
+        err = esp_bt_controller_init(&bt_cfg);
+        if(err != ESP_OK) {
+            ESP_LOGE(TAG, "BT controller initialize failed: %s", esp_err_to_name(err));
+            return false;
+        }
+
+        _bt_initialized = true;
+    }
+
+    err = esp_bt_controller_enable(ESP_BT_MODE_BTDM);
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "BT controller enable failed: %s", esp_err_to_name(err));
+        return false;
+    }
+
+    err = esp_bluedroid_init();
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Bluedroid initialize failed: %s", esp_err_to_name(err));
+        esp_bt_controller_disable();
+        return false;
+    }
+
+    err = esp_bluedroid_enable();
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Bluedroid enable failed: %s", esp_err_to_name(err));
+        esp_bluedroid_deinit();
+        esp_bt_controller_disable();
+        return false;
+    }
+
+    _bt_enabled = true;
+    return true;
 }
 
-bool btStartMode(bt_mode mode) {
-  esp_bt_mode_t esp_bt_mode;
-  esp_bt_controller_config_t cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
-#if CONFIG_IDF_TARGET_ESP32
-  switch (mode) {
-    case BT_MODE_BLE:        esp_bt_mode = ESP_BT_MODE_BLE; break;
-    case BT_MODE_CLASSIC_BT: esp_bt_mode = ESP_BT_MODE_CLASSIC_BT; break;
-    case BT_MODE_BTDM:       esp_bt_mode = ESP_BT_MODE_BTDM; break;
-    default:                 esp_bt_mode = BT_MODE; break;
-  }
-  // esp_bt_controller_enable(MODE) This mode must be equal as the mode in “cfg” of esp_bt_controller_init().
-  cfg.mode = esp_bt_mode;
-  if (cfg.mode == ESP_BT_MODE_CLASSIC_BT) {
-    esp_bt_controller_mem_release(ESP_BT_MODE_BLE);
-  }
-#else
-  // other esp variants dont support BT-classic / DM.
-  esp_bt_mode = BT_MODE;
+bool btStop() {
+    esp_err_t err;
+
+    if(!_bt_enabled) {
+        return true;
+    }
+
+    err = esp_bluedroid_disable();
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Bluedroid disable failed: %s", esp_err_to_name(err));
+        return false;
+    }
+
+    err = esp_bluedroid_deinit();
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Bluedroid deinitialize failed: %s", esp_err_to_name(err));
+        return false;
+    }
+
+    err = esp_bt_controller_disable();
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "BT controller disable failed: %s", esp_err_to_name(err));
+        return false;
+    }
+
+    _bt_enabled = false;
+    return true;
+}
+
 #endif
-
-  if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_ENABLED) {
-    return true;
-  }
-  esp_err_t ret;
-  if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_IDLE) {
-    if ((ret = esp_bt_controller_init(&cfg)) != ESP_OK) {
-      log_e("initialize controller failed: %s", esp_err_to_name(ret));
-      return false;
-    }
-    while (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_IDLE) {}
-  }
-  if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_INITED) {
-    if ((ret = esp_bt_controller_enable(esp_bt_mode)) != ESP_OK) {
-      log_e("BT Enable mode=%d failed %s", BT_MODE, esp_err_to_name(ret));
-      return false;
-    }
-  }
-  if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_ENABLED) {
-    return true;
-  }
-  log_e("BT Start failed");
-  return false;
-}
-
-bool btStop() {
-  if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_IDLE) {
-    return true;
-  }
-  if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_ENABLED) {
-    if (esp_bt_controller_disable()) {
-      log_e("BT Disable failed");
-      return false;
-    }
-    while (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_ENABLED);
-  }
-  if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_INITED) {
-    if (esp_bt_controller_deinit()) {
-      log_e("BT deint failed");
-      return false;
-    }
-    vTaskDelay(1);
-    if (esp_bt_controller_get_status() != ESP_BT_CONTROLLER_STATUS_IDLE) {
-      return false;
-    }
-    return true;
-  }
-  log_e("BT Stop failed");
-  return false;
-}
-
-#else  // CONFIG_BT_ENABLED
-bool btStarted() {
-  return false;
-}
-
-bool btStart() {
-  return false;
-}
-
-bool btStop() {
-  return false;
-}
-
-#endif /* CONFIG_BT_ENABLED */
-
-#endif /* SOC_BT_SUPPORTED */
