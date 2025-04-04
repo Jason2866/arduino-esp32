@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "sdkconfig.h"
-
-#if defined(CONFIG_BT_ENABLED) && defined(CONFIG_BLUEDROID_ENABLED)
-
 #include "SimpleBLE.h"
+#if defined(CONFIG_BT_ENABLED) && defined(CONFIG_BLUEDROID_ENABLED) && SOC_BT_SUPPORTED
+
 #include "esp32-hal-log.h"
 
 #include "esp_bt.h"
