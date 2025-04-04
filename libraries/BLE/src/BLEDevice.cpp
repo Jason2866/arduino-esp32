@@ -8,7 +8,7 @@
 #if SOC_BT_SUPPORTED
 
 #include "sdkconfig.h"
-#if defined(CONFIG_BLUEDROID_ENABLED)
+#if defined(CONFIG_BT_ENABLED) && defined(CONFIG_BLUEDROID_ENABLED)
 #include <freertos/FreeRTOS.h>
 #include <freertos/event_groups.h>
 #include <freertos/task.h>
