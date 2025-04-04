@@ -60,7 +60,7 @@ static void _on_gap(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)
 }
 
 static bool _init_gap(const char *name) {
-  if (!btStarted() && !btStart()) {
+  if (!btStart()) {
     log_e("btStart failed");
     return false;
   }
@@ -93,7 +93,7 @@ static bool _init_gap(const char *name) {
 }
 
 static bool _stop_gap() {
-  if (btStarted()) {
+  if (btStart()) {
     esp_bluedroid_disable();
     esp_bluedroid_deinit();
     btStop();
