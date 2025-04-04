@@ -8,7 +8,7 @@
 #ifndef COMPONENTS_CPP_UTILS_BLEREMOTEDESCRIPTOR_H_
 #define COMPONENTS_CPP_UTILS_BLEREMOTEDESCRIPTOR_H_
 #include "soc/soc_caps.h"
-#if SOC_BLE_SUPPORTED
+#if SOC_BT_SUPPORTED
 
 #include "sdkconfig.h"
 #if defined(CONFIG_BLUEDROID_ENABLED)
@@ -53,5 +53,5 @@ private:
 };
 
 #endif /* CONFIG_BLUEDROID_ENABLED */
-#endif /* SOC_BLE_SUPPORTED */
+#endif /* SOC_BT_SUPPORTED */
 #endif /* COMPONENTS_CPP_UTILS_BLEREMOTEDESCRIPTOR_H_ */

@@ -5,7 +5,7 @@
  *      Author: kolban
  */
 #include "soc/soc_caps.h"
-#if SOC_BLE_SUPPORTED
+#if SOC_BT_SUPPORTED
 
 #include "sdkconfig.h"
 #if defined(CONFIG_BLUEDROID_ENABLED)
@@ -81,4 +81,4 @@ void BLEBeacon::setSignalPower(int8_t signalPower) {
 }  // setSignalPower
 
 #endif
-#endif /* SOC_BLE_SUPPORTED */
+#endif /* SOC_BT_SUPPORTED */

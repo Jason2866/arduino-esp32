@@ -9,7 +9,7 @@
 #define MAIN_BLEDEVICE_H_
 
 #include "soc/soc_caps.h"
-#if SOC_BLE_SUPPORTED
+#if SOC_BT_SUPPORTED
 
 #include "sdkconfig.h"
 #if defined(CONFIG_BLUEDROID_ENABLED)
@@ -99,5 +99,5 @@ public:
 };
 
 #endif /* CONFIG_BLUEDROID_ENABLED */
-#endif /* SOC_BLE_SUPPORTED */
+#endif /* SOC_BT_SUPPORTED */
 #endif /* MAIN_BLEDEVICE_H_ */
