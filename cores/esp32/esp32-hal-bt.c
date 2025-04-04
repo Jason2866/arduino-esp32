@@ -14,7 +14,7 @@
 
 #include "sdkconfig.h"
 #include "soc/soc_caps.h"
-#if defined(CONFIG_BT_ENABLED) && defined(CONFIG_BLUEDROID_ENABLED) && SOC_BT_SUPPORTED
+#if defined(CONFIG_BT_ENABLED) && defined(CONFIG_BLUEDROID_ENABLED) && SOC_BLE_SUPPORTED
 
 #include "esp_bt.h"
 #include "esp_bt_main.h"

@@ -11,7 +11,7 @@
 #ifndef _BLEEddystoneURL_H_
 #define _BLEEddystoneURL_H_
 #include "soc/soc_caps.h"
-#if SOC_BT_SUPPORTED
+#if SOC_BLE_SUPPORTED
 
 #include "BLEUUID.h"
 #include <BLEAdvertisedDevice.h>
@@ -57,5 +57,5 @@ private:
   char BLEHeadder[12];
 };  // BLEEddystoneURL
 
-#endif /* SOC_BT_SUPPORTED */
+#endif /* SOC_BLE_SUPPORTED */
 #endif /* _BLEEddystoneURL_H_ */

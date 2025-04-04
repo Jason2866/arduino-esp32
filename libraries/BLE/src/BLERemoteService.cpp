@@ -5,7 +5,7 @@
  *      Author: kolban
  */
 #include "soc/soc_caps.h"
-#if SOC_BT_SUPPORTED
+#if SOC_BLE_SUPPORTED
 
 #include "sdkconfig.h"
 #if defined(CONFIG_BLUEDROID_ENABLED)
@@ -331,4 +331,4 @@ String BLERemoteService::toString() {
 }  // toString
 
 #endif /* CONFIG_BLUEDROID_ENABLED */
-#endif /* SOC_BT_SUPPORTED */
+#endif /* SOC_BLE_SUPPORTED */

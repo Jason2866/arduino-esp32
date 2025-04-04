@@ -8,7 +8,7 @@
 #ifndef COMPONENTS_CPP_UTILS_BLEADVERTISING_H_
 #define COMPONENTS_CPP_UTILS_BLEADVERTISING_H_
 #include "soc/soc_caps.h"
-#if SOC_BT_SUPPORTED
+#if SOC_BLE_SUPPORTED
 
 #include "sdkconfig.h"
 #if defined(CONFIG_BLUEDROID_ENABLED)
@@ -113,5 +113,5 @@ public:
 #endif  // SOC_BLE_50_SUPPORTED
 
 #endif /* CONFIG_BLUEDROID_ENABLED */
-#endif /* SOC_BT_SUPPORTED */
+#endif /* SOC_BLE_SUPPORTED */
 #endif /* COMPONENTS_CPP_UTILS_BLEADVERTISING_H_ */

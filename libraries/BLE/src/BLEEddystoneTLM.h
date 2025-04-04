@@ -8,7 +8,7 @@
 #ifndef _BLEEddystoneTLM_H_
 #define _BLEEddystoneTLM_H_
 #include "soc/soc_caps.h"
-#if SOC_BT_SUPPORTED
+#if SOC_BLE_SUPPORTED
 
 #include "BLEUUID.h"
 #include <BLEAdvertisedDevice.h>
@@ -57,5 +57,5 @@ private:
   } __attribute__((packed)) m_eddystoneData;
 };  // BLEEddystoneTLM
 
-#endif /* SOC_BT_SUPPORTED */
+#endif /* SOC_BLE_SUPPORTED */
 #endif /* _BLEEddystoneTLM_H_ */

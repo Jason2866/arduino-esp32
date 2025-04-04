@@ -16,7 +16,7 @@
 #define _ESP32_ESP32_HAL_BT_H_
 
 #include "soc/soc_caps.h"
-#if SOC_BT_SUPPORTED
+#if SOC_BLE_SUPPORTED
 
 #include "esp32-hal.h"
 
@@ -40,6 +40,6 @@ bool btStop();
 }
 #endif
 
-#endif /* SOC_BT_SUPPORTED */
+#endif /* SOC_BLE_SUPPORTED */
 
 #endif /* _ESP32_ESP32_HAL_BT_H_ */

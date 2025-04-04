@@ -26,7 +26,7 @@
 #include "esp_ota_ops.h"
 #endif  //CONFIG_APP_ROLLBACK_ENABLE
 #include "esp_private/startup_internal.h"
-#if defined(CONFIG_BT_ENABLED) && defined(CONFIG_BLUEDROID_ENABLED) && SOC_BT_SUPPORTED
+#if defined(CONFIG_BT_ENABLED) && defined(CONFIG_BLUEDROID_ENABLED) && SOC_BLE_SUPPORTED
 #include "esp_bt.h"
 #if CONFIG_IDF_TARGET_ESP32
 bool btInUse() __attribute__((weak));
@@ -304,7 +304,7 @@ void initArduino() {
   if (err) {
     log_e("Failed to initialize NVS! Error: %u", err);
   }
-#if defined(CONFIG_BLUEDROID_ENABLED) && SOC_BT_SUPPORTED
+#if defined(CONFIG_BLUEDROID_ENABLED) && SOC_BLE_SUPPORTED
   if (!btInUse()) {
     esp_bt_controller_mem_release(ESP_BT_MODE_BTDM);
   }

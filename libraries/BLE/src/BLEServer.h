@@ -8,7 +8,7 @@
 #ifndef COMPONENTS_CPP_UTILS_BLESERVER_H_
 #define COMPONENTS_CPP_UTILS_BLESERVER_H_
 #include "soc/soc_caps.h"
-#if SOC_BT_SUPPORTED
+#if SOC_BLE_SUPPORTED
 
 #include "sdkconfig.h"
 #if defined(CONFIG_BLUEDROID_ENABLED)
@@ -147,5 +147,5 @@ public:
 };  // BLEServerCallbacks
 
 #endif /* CONFIG_BLUEDROID_ENABLED */
-#endif /* SOC_BT_SUPPORTED */
+#endif /* SOC_BLE_SUPPORTED */
 #endif /* COMPONENTS_CPP_UTILS_BLESERVER_H_ */
