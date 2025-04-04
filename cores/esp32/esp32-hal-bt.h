@@ -31,9 +31,7 @@ typedef enum {
   BT_MODE_BTDM
 } bt_mode;
 
-bool btStarted();
 bool btStart();
-bool btStartMode(bt_mode mode);
 bool btStop();
 
 #ifdef __cplusplus

@@ -660,7 +660,7 @@ static bool _init_bt(const char *deviceName, bt_mode mode) {
     }
   }
 
-  if (!btStarted() && !btStartMode(mode)) {
+  if (!btStart()) {
     log_e("initialize controller failed");
     return false;
   }
@@ -729,7 +729,7 @@ static bool _init_bt(const char *deviceName, bt_mode mode) {
 }
 
 static bool _stop_bt() {
-  if (btStarted()) {
+  if (btStart()) {
     if (_spp_client) {
       esp_spp_disconnect(_spp_client);
     }
@@ -1115,7 +1115,7 @@ bool BluetoothSerial::isReady(bool checkMaster, int timeout) {
     log_e("Master mode is not active. Call begin(localName, true) to enable Master mode");
     return false;
   }
-  if (!btStarted()) {
+  if (!btStart()) {
     log_e("BT is not initialized. Call begin() first");
     return false;
   }
